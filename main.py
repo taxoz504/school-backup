@@ -3,15 +3,29 @@ from datetime import date
 import os
 import zipfile
 import ftplib
+import configparser
 
 today = date.today()
 path = r"C:\dev\test"
 def ftpsendfil():
-    session = ftplib.FTP('IP','USERNAME','PASSWORD')
+    
+    
+    config = configparser.ConfigParser()
+    config.read('settings.ini')
+
+    ftp_ip = config['FTP']['IP']
+    ftp_username = config['FTP']['USERNAME']
+    ftp_password = config['FTP']['PASSWORD']
+
+
+    session = ftplib.FTP(ftp_ip, ftp_username, ftp_password)
     file = open(f'{today}.zip','rb')                  # file to send
     session.storbinary(f'STOR {today}.zip', file)     # send the file
     file.close()                                    # close file and FTP
     session.quit()
+
+
+    # zips a folder
 
 def zipdir(path, ziph):
     # ziph is zipfile handle
@@ -26,6 +40,8 @@ def zipdir(path, ziph):
 checkcheck = f"{today}.zip"
 isExist = os.path.exists(checkcheck) 
 
+    #   checks if a file with the same date as you run this script exist if 
+    #   not zips the path given in the top of the scirpt and sends it to FTP server delared in ftpsendfil
 if isExist == True:
     print(f"There is already a backup from {today}")
 else:
