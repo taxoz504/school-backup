@@ -5,7 +5,6 @@ import ftplib
 import configparser
 
 today = date.today()
-#path = r"C:\dev\test"
 def ftpsendfil():   
     
     config = configparser.ConfigParser()
