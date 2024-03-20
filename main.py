@@ -1,4 +1,3 @@
-
 from datetime import date
 import os
 import zipfile
@@ -7,8 +6,7 @@ import configparser
 
 today = date.today()
 path = r"C:\dev\test"
-def ftpsendfil():
-    
+def ftpsendfil():   
     
     config = configparser.ConfigParser()
     config.read('settings.ini')
@@ -16,7 +14,6 @@ def ftpsendfil():
     ftp_ip = config['FTP']['IP']
     ftp_username = config['FTP']['USERNAME']
     ftp_password = config['FTP']['PASSWORD']
-
 
     session = ftplib.FTP(ftp_ip, ftp_username, ftp_password)
     file = open(f'{today}.zip','rb')                  # file to send
@@ -36,6 +33,11 @@ def zipdir(path, ziph):
                                        os.path.join(path, '..')))
 
 
+
+config = configparser.ConfigParser()
+config.read('settings.ini')
+
+path = config['Path'][r'PATH']
 
 checkcheck = f"{today}.zip"
 isExist = os.path.exists(checkcheck) 

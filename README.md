@@ -2,7 +2,5 @@
 
 This script will take the folder in the path variable and zip it, then set it off to a remote server
 
-for this script to work
-
-path, and session = ftplib.FTP('IP','USERNAME','PASSWORD') need to be filled out
+The settings.ini file needs to be edited for this to work with a vaild FTP server login and a path to the folder you want to backup
 
