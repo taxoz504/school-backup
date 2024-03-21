@@ -3,6 +3,10 @@ import os
 import zipfile
 import ftplib
 import configparser
+import subprocess
+import sys
+import platform
+system2 = platform.system()
 
 today = date.today()
 def ftpsendfil():
@@ -24,9 +28,9 @@ def ftpsendfil():
     for file in files:
         print(file)
 
-    file = open(f'{today}.zip','rb')                  # file to send
-    session.storbinary(f'STOR {ftp_serverpath}/{today}.zip', file)     # send the file
-    file.close()                                    # close file and FTP
+    file = open(f'{today}.zip','rb')                                        # file to send
+    session.storbinary(f'STOR {ftp_serverpath}/{today}.zip', file)          # send the file
+    file.close()                                                            # close file and FTP
     session.quit()
 
 def listserverfiles():
@@ -46,8 +50,6 @@ def listserverfiles():
     for file in files:
         print(file)
 
-
-
     # zips a folder
 
 def zipdir(path, ziph):
@@ -58,16 +60,24 @@ def zipdir(path, ziph):
                        os.path.relpath(os.path.join(root, file), 
                                        os.path.join(path, '..')))
 
-
-
 config = configparser.ConfigParser()
 config.read('settings.ini')
-
 path = config['Path'][r'PATH']
 
-checkcheck = f"{today}.zip"
-isExist = os.path.exists(checkcheck) 
+# settings for copy
+copyon = config['Copy']['TurnOn']
+copypath = config['Copy']['CopyPath']
+copydestination = config['Copy']['CopyDestination']
 
+checkcheck = f"{today}.zip"
+isExist = os.path.exists(checkcheck)
+if copyon == "yes":
+    if system2 == "Windows":
+        p = subprocess.Popen(['powershell.exe', f'Copy-Item -Path "{copypath}\*" -Destination "{copydestination}" -Recurse -Force'], stdout=sys.stdout)
+        exit(1)
+    else:
+        print("this features is only supported on windows")
+        exit(1)
     #   checks if a file with the same date as you run this script exist if 
     #   not zips the path given in the top of the scirpt and sends it to FTP server delared in settings.ini
 if isExist == True:
